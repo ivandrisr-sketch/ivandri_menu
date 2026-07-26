@@ -1,128 +1,123 @@
 # ==========================================================
-# AUTO WINDOWS PRO
+# AUTO WINDOWS PRO v2.0
 # Desarrollado por: Ivan Salcedo
-# Version: 1.0
+# GitHub: https://github.com/ivandrisr-sketch/ivandri_menu
 # ==========================================================
 
+Clear-Host
 $Host.UI.RawUI.WindowTitle = "AUTO WINDOWS PRO"
 
+$BaseURL = "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules"
+
 function Esperar {
-    Write-Host ""
-    Read-Host "Presione ENTER para volver al menú"
+    Read-Host "`nPresione ENTER para continuar..."
 }
 
-function MostrarBanner {
+function Banner {
 
     Clear-Host
 
-    Write-Host "==========================================================" -ForegroundColor Cyan
-    Write-Host "               AUTO WINDOWS PRO v1.0" -ForegroundColor Green
-    Write-Host "             Desarrollado por Ivan Salcedo" -ForegroundColor Yellow
-    Write-Host "==========================================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "============================================================" -ForegroundColor Cyan
+    Write-Host "                 AUTO WINDOWS PRO v2.0" -ForegroundColor Green
+    Write-Host "               Desarrollado por Ivan Salcedo" -ForegroundColor Yellow
+    Write-Host "============================================================" -ForegroundColor Cyan
     Write-Host ""
 
-    Write-Host " Equipo : $env:COMPUTERNAME"
-    Write-Host " Usuario: $env:USERNAME"
-    Write-Host " Fecha  : $(Get-Date)"
+    Write-Host (" Equipo      : {0}" -f $env:COMPUTERNAME)
+    Write-Host (" Usuario     : {0}" -f $env:USERNAME)
+    Write-Host (" Windows     : {0}" -f (Get-CimInstance Win32_OperatingSystem).Caption)
+    Write-Host (" PowerShell  : {0}" -f $PSVersionTable.PSVersion)
+    Write-Host (" Fecha       : {0}" -f (Get-Date))
     Write-Host ""
+
 }
 
-function MostrarMenu {
+function EjecutarModulo($Archivo){
 
-    Write-Host " [1] Diagnóstico" -ForegroundColor Yellow
-    Write-Host " [2] Seguridad"
-    Write-Host " [3] Mantenimiento"
-    Write-Host " [4] Red"
-    Write-Host " [5] WiFi"
-    Write-Host " [6] Office"
-    Write-Host " [7] Windows"
-    Write-Host " [8] Software"
-    Write-Host " [9] Drivers"
-    Write-Host "[10] Inventario"
-    Write-Host "[11] Backup"
-    Write-Host "[12] Buscar Actualizaciones"
-    Write-Host ""
-    Write-Host " [0] Salir" -ForegroundColor Red
-    Write-Host ""
-}
+    try{
 
-function Modulo($titulo){
+        irm "$BaseURL/$Archivo" | iex
 
-    Clear-Host
+    }
 
-    Write-Host "==============================================" -ForegroundColor Cyan
-    Write-Host "               $titulo" -ForegroundColor Green
-    Write-Host "==============================================" -ForegroundColor Cyan
-    Write-Host ""
+    catch{
 
-    Write-Host "Este módulo se desarrollará en la siguiente fase." -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "No fue posible cargar el módulo." -ForegroundColor Red
+        Write-Host $_.Exception.Message -ForegroundColor Yellow
+        Esperar
 
-    Esperar
+    }
+
 }
 
 do{
 
-    MostrarBanner
-    MostrarMenu
+    Banner
+
+    Write-Host "============== MENU PRINCIPAL ==============" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host " [1] Diagnóstico del Equipo"
+    Write-Host " [2] Seguridad"
+    Write-Host " [3] Mantenimiento"
+    Write-Host " [4] Red y Dominio"
+    Write-Host " [5] WiFi"
+    Write-Host " [6] Microsoft Office"
+    Write-Host " [7] Windows"
+    Write-Host " [8] Software"
+    Write-Host " [9] Drivers"
+    Write-Host "[10] Herramientas del Sistema"
+    Write-Host "[11] Backup"
+    Write-Host "[12] Actualizar AUTO WINDOWS"
+    Write-Host ""
+    Write-Host " [0] Salir" -ForegroundColor Red
+    Write-Host ""
 
     $opcion = Read-Host "Seleccione una opción"
 
     switch($opcion){
 
-    "1"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Diagnostico.ps1" | iex
+        "1" { EjecutarModulo "Diagnostico.ps1" }
+
+        "2" { EjecutarModulo "Seguridad.ps1" }
+
+        "3" { EjecutarModulo "Mantenimiento.ps1" }
+
+        "4" { EjecutarModulo "RedDominio.ps1" }
+
+        "5" { EjecutarModulo "Wifi.ps1" }
+
+        "6" { EjecutarModulo "Office.ps1" }
+
+        "7" { EjecutarModulo "Windows.ps1" }
+
+        "8" { EjecutarModulo "Software.ps1" }
+
+        "9" { EjecutarModulo "Drivers.ps1" }
+
+        "10" { EjecutarModulo "Herramientas.ps1" }
+
+        "11" { EjecutarModulo "Backup.ps1" }
+
+        "12" { EjecutarModulo "Actualizar.ps1" }
+
+        "0"{
+            Clear-Host
+            Write-Host ""
+            Write-Host "Gracias por utilizar AUTO WINDOWS PRO" -ForegroundColor Green
+            Start-Sleep 2
+            break
+        }
+
+        default{
+
+            Write-Host ""
+            Write-Host "Opción inválida." -ForegroundColor Red
+            Start-Sleep 2
+
+        }
+
     }
 
-    "2"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Seguridad.ps1" | iex
-    }
-
-    "3"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Mantenimiento.ps1" | iex
-    }
-
-    "4"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Red.ps1" | iex
-    }
-
-    "5"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Wifi.ps1" | iex
-    }
-
-    "6"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Office.ps1" | iex
-    }
-
-    "7"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Windows.ps1" | iex
-    }
-
-    "8"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Software.ps1" | iex
-    }
-
-    "9"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Drivers.ps1" | iex
-    }
-
-    "10"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Inventario.ps1" | iex
-    }
-
-    "11"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Backup.ps1" | iex
-    }
-
-    "12"{
-        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Actualizar.ps1" | iex
-    }
-
-    "0"{
-        break
-    }
-
-    default{
-        Write-Host "Opción inválida" -ForegroundColor Red
-        Start-Sleep 2
-    }
-}
+}while($true)
