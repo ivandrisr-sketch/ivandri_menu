@@ -69,65 +69,60 @@ do{
 
     switch($opcion){
 
-        "1" { Modulo "DIAGNOSTICO" }
-
-        "2" { Modulo "SEGURIDAD" }
-
-        "3" { Modulo "MANTENIMIENTO" }
-
-        "4" { Modulo "RED" }
-
-        "5" { Modulo "WIFI" }
-
-        "6" { Modulo "MICROSOFT OFFICE" }
-
-        "7" { Modulo "WINDOWS" }
-
-        "8" { Modulo "SOFTWARE" }
-
-        "9" { Modulo "DRIVERS" }
-
-        "10" { Modulo "INVENTARIO" }
-
-        "11" { Modulo "BACKUP" }
-
-        "12" {
-
-            Clear-Host
-
-            Write-Host "Buscando actualizaciones..." -ForegroundColor Green
-
-            Start-Sleep -Seconds 2
-
-            Write-Host ""
-            Write-Host "No hay actualizaciones disponibles." -ForegroundColor Yellow
-
-            Esperar
-
-        }
-
-        "0" {
-
-            Clear-Host
-
-            Write-Host ""
-            Write-Host "Gracias por utilizar AUTO WINDOWS PRO" -ForegroundColor Green
-
-            Start-Sleep -Seconds 2
-
-            break
-
-        }
-
-        default{
-
-            Write-Host ""
-            Write-Host "Opción inválida." -ForegroundColor Red
-
-            Start-Sleep -Seconds 2
-
-        }
-
+    "1"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Diagnostico.ps1" | iex
     }
 
-}while($true)
+    "2"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Seguridad.ps1" | iex
+    }
+
+    "3"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Mantenimiento.ps1" | iex
+    }
+
+    "4"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Red.ps1" | iex
+    }
+
+    "5"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Wifi.ps1" | iex
+    }
+
+    "6"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Office.ps1" | iex
+    }
+
+    "7"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Windows.ps1" | iex
+    }
+
+    "8"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Software.ps1" | iex
+    }
+
+    "9"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Drivers.ps1" | iex
+    }
+
+    "10"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Inventario.ps1" | iex
+    }
+
+    "11"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Backup.ps1" | iex
+    }
+
+    "12"{
+        irm "https://raw.githubusercontent.com/ivandrisr-sketch/ivandri_menu/main/Modules/Actualizar.ps1" | iex
+    }
+
+    "0"{
+        break
+    }
+
+    default{
+        Write-Host "Opción inválida" -ForegroundColor Red
+        Start-Sleep 2
+    }
+}
