@@ -1,14 +1,10 @@
 # ==========================================================
 # AUTO WINDOWS PRO
-# MODULO: WIFI v3.1
+# MODULO: WIFI v3.2
 # Desarrollado por: Ivan Salcedo
 # ==========================================================
 
 $Host.UI.RawUI.WindowTitle = "AUTO WINDOWS PRO - WIFI"
-
-
-
-# ================= FUNCIONES =================
 
 
 function Esperar {
@@ -17,7 +13,6 @@ function Esperar {
     Read-Host "Presione ENTER para continuar"
 
 }
-
 
 
 function Titulo {
@@ -33,28 +28,23 @@ function Titulo {
 }
 
 
+function Admin {
 
-function EsAdministrador {
+    $id=[Security.Principal.WindowsIdentity]::GetCurrent()
 
-    $usuario = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $p=New-Object Security.Principal.WindowsPrincipal($id)
 
-    $principal = New-Object Security.Principal.WindowsPrincipal($usuario)
-
-    return $principal.IsInRole(
-        [Security.Principal.WindowsBuiltInRole]::Administrator
-    )
+    return $p.IsInRole(
+    [Security.Principal.WindowsBuiltInRole]::Administrator)
 
 }
 
 
 
-# ================= VALIDAR ADMIN =================
-
-
-if(!(EsAdministrador)){
+if(!(Admin)){
 
     Write-Host ""
-    Write-Host "Ejecute AUTO WINDOWS PRO como Administrador" -ForegroundColor Red
+    Write-Host "Ejecute como Administrador" -ForegroundColor Red
 
     Esperar
 
@@ -64,9 +54,6 @@ if(!(EsAdministrador)){
 
 
 
-# ================= MENU =================
-
-
 do{
 
 
@@ -74,132 +61,95 @@ Titulo
 
 
 Write-Host "[1] Mostrar adaptador WiFi"
-Write-Host "[2] Mostrar redes WiFi disponibles"
-Write-Host "[3] Ver perfiles WiFi guardados"
-Write-Host "[4] Mostrar contraseña WiFi guardada"
+Write-Host "[2] Redes WiFi disponibles"
+Write-Host "[3] Perfiles WiFi guardados"
+Write-Host "[4] Mostrar contraseña WiFi"
 Write-Host "[5] Exportar perfiles WiFi"
 Write-Host "[6] Eliminar perfil WiFi"
-Write-Host "[7] Conectar a red WiFi"
+Write-Host "[7] Conectar WiFi"
 Write-Host "[8] Desconectar WiFi"
 Write-Host "[9] Reiniciar adaptador WiFi"
-Write-Host "[10] Diagnostico WiFi Windows"
-Write-Host "[11] Informacion señal WiFi"
-Write-Host "[12] Ver IP WiFi"
-Write-Host "[13] Renovar IP WiFi"
-Write-Host "[14] Limpiar perfiles antiguos"
-Write-Host "[15] Reporte WiFi"
+Write-Host "[10] Reporte WLAN Windows"
+Write-Host "[11] Estado señal WiFi"
+Write-Host "[12] Mostrar IP WiFi"
+Write-Host "[13] Renovar IP"
+Write-Host "[14] Limpiar perfil WiFi"
+Write-Host "[15] Crear reporte TXT"
 
 Write-Host ""
-
 Write-Host "[0] Volver"
-
 Write-Host ""
 
 
-$opcion = Read-Host "Seleccione una opcion"
+$opcion=Read-Host "Seleccione una opcion"
 
 
 
 switch($opcion){
 
 
-
-# ==================================================
-# 1 ADAPTADOR WIFI
-# ==================================================
-
 "1"{
 
 Clear-Host
 
-
 try{
-
 
 Get-NetAdapter |
 Where-Object {
-$_.InterfaceDescription -match "Wi-Fi|Wireless|WLAN"
+$_.Name -match "Wi-Fi|WLAN|Wireless"
 } |
 Format-Table Name,Status,LinkSpeed,MacAddress -Auto
-
 
 }
 catch{
 
-
-Write-Host ""
-Write-Host "No se encontro adaptador WiFi" -ForegroundColor Yellow
-
+Write-Host "No se encontro adaptador WiFi"
 
 }
-
 
 Esperar
 
 }
 
 
-
-# ==================================================
-# 2 REDES DISPONIBLES
-# ==================================================
 
 "2"{
 
 Clear-Host
 
-
 netsh wlan show networks mode=bssid
-
 
 Esperar
 
 }
 
 
-
-# ==================================================
-# 3 PERFILES GUARDADOS
-# ==================================================
 
 "3"{
 
 Clear-Host
 
-
 netsh wlan show profiles
-
 
 Esperar
 
 }
 
 
-
-# ==================================================
-# 4 CONTRASEÑA WIFI
-# ==================================================
 
 "4"{
 
 Clear-Host
 
-
-$perfil = Read-Host "Ingrese nombre del WiFi"
-
+$perfil=Read-Host "Nombre del perfil WiFi"
 
 netsh wlan show profile name="$perfil" key=clear
-
 
 Esperar
 
 }
 
 
-
-# ==================================================
-# 5 EXPORTAR PERFILES
-# ==================================================
 
 "5"{
 
@@ -209,37 +159,20 @@ Clear-Host
 $ruta="$env:USERPROFILE\Desktop\WiFi_Backup"
 
 
-
-try{
-
-
 New-Item `
--ItemType Directory `
 -Path $ruta `
+-ItemType Directory `
 -Force | Out-Null
 
 
-
-netsh wlan export profile `
-folder="$ruta" `
-key=clear
-
+netsh wlan export profile folder="$ruta" key=clear
 
 
 Write-Host ""
-Write-Host "Perfiles exportados correctamente" -ForegroundColor Green
+
+Write-Host "Exportacion realizada:" -ForegroundColor Green
+
 Write-Host $ruta
-
-
-}
-catch{
-
-
-Write-Host ""
-Write-Host $_.Exception.Message -ForegroundColor Yellow
-
-
-}
 
 
 Esperar
@@ -247,21 +180,16 @@ Esperar
 }
 
 
-
-# ==================================================
-# 6 ELIMINAR PERFIL
-# ==================================================
 
 "6"{
 
 Clear-Host
 
 
-$perfil=Read-Host "Nombre del perfil WiFi"
+$perfil=Read-Host "Perfil a eliminar"
 
 
 netsh wlan delete profile name="$perfil"
-
 
 
 Esperar
@@ -270,16 +198,12 @@ Esperar
 
 
 
-# ==================================================
-# 7 CONECTAR WIFI
-# ==================================================
-
 "7"{
 
 Clear-Host
 
 
-$perfil=Read-Host "Nombre del perfil WiFi"
+$perfil=Read-Host "Perfil WiFi"
 
 
 netsh wlan connect name="$perfil"
@@ -290,10 +214,6 @@ Esperar
 }
 
 
-
-# ==================================================
-# 8 DESCONECTAR WIFI
-# ==================================================
 
 "8"{
 
@@ -309,10 +229,6 @@ Esperar
 
 
 
-# ==================================================
-# 9 REINICIAR ADAPTADOR WIFI
-# ==================================================
-
 "9"{
 
 Clear-Host
@@ -323,9 +239,8 @@ try{
 
 $wifi=Get-NetAdapter |
 Where-Object {
-$_.InterfaceDescription -match "Wi-Fi|Wireless|WLAN"
+$_.Name -match "Wi-Fi|WLAN|Wireless"
 }
-
 
 
 Disable-NetAdapter `
@@ -333,15 +248,12 @@ Disable-NetAdapter `
 -Confirm:$false
 
 
-
 Start-Sleep 3
-
 
 
 Enable-NetAdapter `
 -Name $wifi.Name `
 -Confirm:$false
-
 
 
 Write-Host ""
@@ -351,10 +263,7 @@ Write-Host "Adaptador reiniciado" -ForegroundColor Green
 }
 catch{
 
-
-Write-Host ""
-Write-Host "No fue posible reiniciar WiFi" -ForegroundColor Yellow
-
+Write-Host "Error reiniciando WiFi"
 
 }
 
@@ -364,10 +273,6 @@ Esperar
 }
 
 
-
-# ==================================================
-# 10 DIAGNOSTICO WIFI
-# ==================================================
 
 "10"{
 
@@ -379,7 +284,7 @@ netsh wlan show wlanreport
 
 Write-Host ""
 
-Write-Host "Reporte generado por Windows" -ForegroundColor Green
+Write-Host "Reporte WLAN generado por Windows"
 
 
 Esperar
@@ -387,10 +292,6 @@ Esperar
 }
 
 
-
-# ==================================================
-# 11 SEÑAL WIFI
-# ==================================================
 
 "11"{
 
@@ -406,10 +307,6 @@ Esperar
 
 
 
-# ==================================================
-# 12 IP WIFI
-# ==================================================
-
 "12"{
 
 Clear-Host
@@ -417,9 +314,8 @@ Clear-Host
 
 Get-NetIPConfiguration |
 Where-Object {
-$_.InterfaceAlias -match "Wi-Fi|Wireless"
+$_.InterfaceAlias -match "Wi-Fi"
 }
-
 
 
 Esperar
@@ -427,10 +323,6 @@ Esperar
 }
 
 
-
-# ==================================================
-# 13 RENOVAR IP
-# ==================================================
 
 "13"{
 
@@ -450,23 +342,12 @@ Esperar
 
 
 
-# ==================================================
-# 14 LIMPIAR PERFILES
-# ==================================================
-
 "14"{
 
 Clear-Host
 
 
-Write-Host "Perfiles WiFi almacenados:" -ForegroundColor Cyan
-
-netsh wlan show profiles
-
-
-Write-Host ""
-
-$perfil=Read-Host "Perfil a eliminar"
+$perfil=Read-Host "Perfil WiFi a eliminar"
 
 
 netsh wlan delete profile name="$perfil"
@@ -478,59 +359,40 @@ Esperar
 
 
 
-# ==================================================
-# 15 REPORTE WIFI
-# ==================================================
-
 "15"{
 
 Clear-Host
 
 
-$ruta="$env:USERPROFILE\Desktop\Reporte_WIFI.txt"
+$archivo="$env:USERPROFILE\Desktop\Reporte_WIFI.txt"
 
 
+"==============================" | Out-File $archivo
 
-try{
+"AUTO WINDOWS PRO - WIFI" | Out-File $archivo -Append
 
+"Fecha: $(Get-Date)" | Out-File $archivo -Append
 
-"==============================" | Out-File $ruta
-
-"AUTO WINDOWS PRO - REPORTE WIFI" | Out-File $ruta -Append
-
-"Fecha: $(Get-Date)" | Out-File $ruta -Append
-
-"" | Out-File $ruta -Append
+"" | Out-File $archivo -Append
 
 
 netsh wlan show interfaces |
-Out-File $ruta -Append
+Out-File $archivo -Append
 
 
-"" | Out-File $ruta -Append
+"" | Out-File $archivo -Append
 
 
 netsh wlan show profiles |
-Out-File $ruta -Append
+Out-File $archivo -Append
 
 
 
 Write-Host ""
 
-Write-Host "Reporte creado:" -ForegroundColor Green
+Write-Host "Reporte creado correctamente" -ForegroundColor Green
 
-Write-Host $ruta
-
-
-
-}
-catch{
-
-
-Write-Host $_.Exception.Message -ForegroundColor Yellow
-
-
-}
+Write-Host $archivo
 
 
 Esperar
@@ -538,10 +400,6 @@ Esperar
 }
 
 
-
-# ==================================================
-# SALIR
-# ==================================================
 
 "0"{
 
@@ -553,12 +411,11 @@ return
 
 default{
 
-
 Write-Host ""
+
 Write-Host "Opcion invalida" -ForegroundColor Red
 
 Start-Sleep 2
-
 
 }
 
