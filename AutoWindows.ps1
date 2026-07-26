@@ -84,7 +84,7 @@ do{
 
         "3" { EjecutarModulo "Mantenimiento.ps1" }
 
-        "4" { EjecutarModulo "RedDominio.ps1" }
+        "4" { EjecutarModulo "Red.ps1" }
 
         "5" { EjecutarModulo "Wifi.ps1" }
 
@@ -100,7 +100,7 @@ do{
 
         "11" { EjecutarModulo "Backup.ps1" }
 
-        "12" { EjecutarModulo "Actualizar.ps1" }
+        "12" { EjecutarModulo "Update.ps1" }
 
         "0"{
             Clear-Host
