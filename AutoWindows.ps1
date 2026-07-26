@@ -1,16 +1,33 @@
-Clear-Host
+# ==========================================================
+# AUTO WINDOWS PRO
+# Desarrollado por: Ivan Salcedo
+# Version: 1.0
+# ==========================================================
 
 $Host.UI.RawUI.WindowTitle = "AUTO WINDOWS PRO"
 
-function Mostrar-Menu {
+function Esperar {
+    Write-Host ""
+    Read-Host "Presione ENTER para volver al menú"
+}
+
+function MostrarBanner {
 
     Clear-Host
 
+    Write-Host "==========================================================" -ForegroundColor Cyan
+    Write-Host "               AUTO WINDOWS PRO v1.0" -ForegroundColor Green
+    Write-Host "             Desarrollado por Ivan Salcedo" -ForegroundColor Yellow
+    Write-Host "==========================================================" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "============================================================" -ForegroundColor Cyan
-    Write-Host "                AUTO WINDOWS PRO v1.0" -ForegroundColor Green
-    Write-Host "============================================================" -ForegroundColor Cyan
+
+    Write-Host " Equipo : $env:COMPUTERNAME"
+    Write-Host " Usuario: $env:USERNAME"
+    Write-Host " Fecha  : $(Get-Date)"
     Write-Host ""
+}
+
+function MostrarMenu {
 
     Write-Host " [1] Diagnóstico" -ForegroundColor Yellow
     Write-Host " [2] Seguridad"
@@ -23,130 +40,94 @@ function Mostrar-Menu {
     Write-Host " [9] Drivers"
     Write-Host "[10] Inventario"
     Write-Host "[11] Backup"
-    Write-Host "[12] Actualizar"
+    Write-Host "[12] Buscar Actualizaciones"
     Write-Host ""
     Write-Host " [0] Salir" -ForegroundColor Red
     Write-Host ""
+}
 
+function Modulo($titulo){
+
+    Clear-Host
+
+    Write-Host "==============================================" -ForegroundColor Cyan
+    Write-Host "               $titulo" -ForegroundColor Green
+    Write-Host "==============================================" -ForegroundColor Cyan
+    Write-Host ""
+
+    Write-Host "Este módulo se desarrollará en la siguiente fase." -ForegroundColor Yellow
+
+    Esperar
 }
 
 do{
 
-Mostrar-Menu
+    MostrarBanner
+    MostrarMenu
 
-$opcion=Read-Host "Seleccione una opcion"
+    $opcion = Read-Host "Seleccione una opción"
 
-switch($opcion){
+    switch($opcion){
 
-"1"{
+        "1" { Modulo "DIAGNOSTICO" }
 
-Write-Host ""
-Write-Host "Modulo Diagnostico" -ForegroundColor Green
-Pause
+        "2" { Modulo "SEGURIDAD" }
 
-}
+        "3" { Modulo "MANTENIMIENTO" }
 
-"2"{
+        "4" { Modulo "RED" }
 
-Write-Host ""
-Write-Host "Modulo Seguridad"
-Pause
+        "5" { Modulo "WIFI" }
 
-}
+        "6" { Modulo "MICROSOFT OFFICE" }
 
-"3"{
+        "7" { Modulo "WINDOWS" }
 
-Write-Host ""
-Write-Host "Modulo Mantenimiento"
-Pause
+        "8" { Modulo "SOFTWARE" }
 
-}
+        "9" { Modulo "DRIVERS" }
 
-"4"{
+        "10" { Modulo "INVENTARIO" }
 
-Write-Host ""
-Write-Host "Modulo Red"
-Pause
+        "11" { Modulo "BACKUP" }
 
-}
+        "12" {
 
-"5"{
+            Clear-Host
 
-Write-Host ""
-Write-Host "Modulo WiFi"
-Pause
+            Write-Host "Buscando actualizaciones..." -ForegroundColor Green
 
-}
+            Start-Sleep -Seconds 2
 
-"6"{
+            Write-Host ""
+            Write-Host "No hay actualizaciones disponibles." -ForegroundColor Yellow
 
-Write-Host ""
-Write-Host "Modulo Office"
-Pause
+            Esperar
 
-}
+        }
 
-"7"{
+        "0" {
 
-Write-Host ""
-Write-Host "Modulo Windows"
-Pause
+            Clear-Host
 
-}
+            Write-Host ""
+            Write-Host "Gracias por utilizar AUTO WINDOWS PRO" -ForegroundColor Green
 
-"8"{
+            Start-Sleep -Seconds 2
 
-Write-Host ""
-Write-Host "Modulo Software"
-Pause
+            break
 
-}
+        }
 
-"9"{
+        default{
 
-Write-Host ""
-Write-Host "Modulo Drivers"
-Pause
+            Write-Host ""
+            Write-Host "Opción inválida." -ForegroundColor Red
 
-}
+            Start-Sleep -Seconds 2
 
-"10"{
+        }
 
-Write-Host ""
-Write-Host "Modulo Inventario"
-Pause
-
-}
-
-"11"{
-
-Write-Host ""
-Write-Host "Modulo Backup"
-Pause
-
-}
-
-"12"{
-
-Write-Host ""
-Write-Host "Buscando actualizaciones..."
-Pause
-
-}
-
-"0"{
-
-break
-
-}
-
-default{
-
-Write-Host "Opcion invalida" -ForegroundColor Red
-Pause
-
-}
-
-}
+    }
 
 }while($true)
